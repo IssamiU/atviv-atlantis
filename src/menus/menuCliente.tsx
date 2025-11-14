@@ -1,9 +1,10 @@
 import { useState } from 'react'
-import CadastroClienteTitular from '../componentes/cadastro/cadastroClienteTitular'
-import CadastroClienteDependente from '../componentes/cadastro/cadastroClienteDependente'
-import EditarCliente from '../componentes/cadastro/editarCliente'
-import ExcluirCliente from '../componentes/cadastro/excluirCliente'
-import CadastroHospedagem from '../componentes/cadastro/cadastroHospedagem'
+import CadastroClienteTitular from '../componentes/entidades/cadastroClienteTitular'
+import CadastroClienteDependente from '../componentes/entidades/cadastroClienteDependente'
+import EditarCliente from '../componentes/entidades/editarCliente'
+import ExcluirCliente from '../componentes/entidades/excluirCliente'
+import CadastroHospedagem from '../componentes/entidades/cadastroHospedagem'
+import DeletarHospedagem from '../componentes/entidades/deletarHospedagem'
 
 function MenuCliente() {
   const [opcaoSelecionada, setOpcaoSelecionada] = useState<string | null>(null)
@@ -20,6 +21,8 @@ function MenuCliente() {
         return <ExcluirCliente />
       case 'hospedagem':
         return <CadastroHospedagem />
+      case 'deletarHospedagem':
+        return <DeletarHospedagem />
       default:
         return null
     }
@@ -84,13 +87,25 @@ function MenuCliente() {
 
             <button 
               onClick={() => setOpcaoSelecionada('hospedagem')}
-              className="p-6 bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow border-l-4 border-purple-500 text-left md:col-span-2"
+              className="p-6 bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow border-l-4 border-purple-500 text-left"
             >
               <h3 className="text-lg font-semibold text-gray-900 mb-2">
                 Cadastrar Hospedagem
               </h3>
               <p className="text-sm text-gray-600">
                 Registre novas hospedagens para os clientes
+              </p>
+            </button>
+
+            <button 
+              onClick={() => setOpcaoSelecionada('deletarHospedagem')}
+              className="p-6 bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow border-l-4 border-orange-500 text-left"
+            >
+              <h3 className="text-lg font-semibold text-gray-900 mb-2">
+                Excluir Hospedagem
+              </h3>
+              <p className="text-sm text-gray-600">
+                Remova hospedagens do sistema
               </p>
             </button>
           </div>

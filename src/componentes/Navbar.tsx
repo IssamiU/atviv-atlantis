@@ -22,7 +22,7 @@ function Navbar({ setPagina }: NavbarProps) {
               onClick={() => setPagina('cliente')} 
               className="px-4 py-2 text-sm font-medium text-gray-700 hover:text-blue-600 hover:bg-blue-50 rounded-md transition-colors"
             >
-              Cadastro
+              Gerenciamento
             </button>
             <button 
               onClick={() => setPagina('listagem')} 
