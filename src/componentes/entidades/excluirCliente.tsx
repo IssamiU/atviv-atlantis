@@ -4,6 +4,7 @@ interface Cliente {
   id: number
   nome: string
   cpf: string
+  tipo?: string
 }
 
 function ExcluirCliente() {
@@ -14,20 +15,39 @@ function ExcluirCliente() {
   }, [])
 
   const carregarClientes = () => {
-    const dados = localStorage.getItem('clientesTitulares')
-    if (dados) {
-      setClientes(JSON.parse(dados))
+    const todosClientes: Cliente[] = []
+
+    const dadosTitulares = localStorage.getItem('clientesTitulares')
+    if (dadosTitulares) {
+      const titulares = JSON.parse(dadosTitulares)
+      todosClientes.push(...titulares.map((c: Cliente) => ({...c, tipo: 'Titular'})))
     }
+    
+    const dadosDependentes = localStorage.getItem('clientesDependentes')
+    if (dadosDependentes) {
+      const dependentes = JSON.parse(dadosDependentes)
+      todosClientes.push(...dependentes.map((c: Cliente) => ({ ...c, tipo: 'Dependente' })))
+    }
+
+    setClientes(todosClientes)
   }
 
-  const handleExcluir = (id: number) => {
+  const handleExcluir = (id: number, tipo: string) => {
     const confirmar = window.confirm('Tem certeza que deseja excluir este cliente?')
     
     if (confirmar) {
       try {
-        const clientesAtualizados = clientes.filter(c => c.id !== id)
-        localStorage.setItem('clientesTitulares', JSON.stringify(clientesAtualizados))
-        setClientes(clientesAtualizados)
+        if (tipo === 'Titular') {
+          const dadosTitulares = JSON.parse(localStorage.getItem('clientesTitulares') || '[]')
+          const clientesAtualizados = dadosTitulares.filter((c: Cliente) => c.id !== id)
+          localStorage.setItem('clientesTitulares', JSON.stringify(clientesAtualizados))
+        } else {
+          const dadosDependentes = JSON.parse(localStorage.getItem('clientesDependentes') || '[]')
+          const clientesAtualizados = dadosDependentes.filter((c: Cliente) => c.id !== id)
+          localStorage.setItem('clientesDependentes', JSON.stringify(clientesAtualizados))
+        }
+        
+        carregarClientes()
         alert('Cliente excluído com sucesso!')
       } catch (error) {
         console.error('Erro ao excluir cliente:', error)
@@ -57,7 +77,7 @@ function ExcluirCliente() {
                   <p className="text-sm text-gray-600">CPF: {cliente.cpf}</p>
                 </div>
                 <button
-                  onClick={() => handleExcluir(cliente.id)}
+                  onClick={() => handleExcluir(cliente.id, cliente.tipo || '')}
                   className="px-4 py-2 bg-red-600 hover:bg-red-700 text-white font-medium rounded-md transition-colors"
                 >
                   Excluir
